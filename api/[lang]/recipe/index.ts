@@ -5,28 +5,7 @@ import dayjs from "dayjs"
 import { VercelResponse, VercelRequest } from "@vercel/node";
 import { fetchHTML } from "../../../utils/fetch";
 import { getLang } from "../../../utils/lang";
-import { ResponseGetList, ListRecipeData } from "../../../types/recipe"
-
-
-/*
-  id : null
-  food_name : title
-  food_brand : null
-  fat  : fat
-  carb : carbo
-  calorie : calorie
-  protein : protein
-  food_photo : photo
-  portion : 1
-  portion_unit :
-  cooking_duration : coocking_duration + cooking_prep_duration
-  recipe_id : 0
-  ingredients : ingredients
-  meal_type : mealTypes
-  serving_size : ingredients
-  food_size : null
-  user_id : null
-*/
+import { ListRecipeData } from "../../../types/recipe"
 
 export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
   const tempDir: string = "temp"
