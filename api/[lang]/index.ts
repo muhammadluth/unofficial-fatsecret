@@ -10,10 +10,7 @@ interface DefaultMenu {
 }
 
 // eslint-disable-next-line @typescript
-export default async (
-  request: VercelRequest,
-  response: VercelResponse
-): Promise<void> => {
+export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
   const langConfig = getLang(String(request.query.lang));
   if (!langConfig) {
     response.json({ error: `${request.query.lang} are not supported` });

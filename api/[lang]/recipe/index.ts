@@ -1,5 +1,4 @@
 import path from "path"
-import fs from "fs"
 import cheerio from "cheerio";
 import { VercelResponse, VercelRequest } from "@vercel/node";
 import { fetchHTML } from "../../../utils/fetch";
@@ -32,8 +31,6 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
   const search: any = request.query.search;
   const page: any = request.query.page || 0;
   const langConfig = getLang(String(request.query.lang));
-
-  console.log(search, page)
 
   if (!langConfig) {
     response.
