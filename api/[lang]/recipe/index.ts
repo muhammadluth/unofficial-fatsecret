@@ -56,10 +56,10 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
     const count = parseInt(searchSum[4]);
     const next = count === parseInt(searchSum[2]) // endOfPage
       ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) + 1}`;
+      : `${host}/api/${langConfig.lang}/recipe?search=${search}&page=${parseInt(page) + 1}`;
     const previous = page < 1 // startOfPage
       ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) - 1}`;
+      : `${host}/api/${langConfig.lang}/recipe?search=${search}&page=${parseInt(page) - 1}`;
     responseGetList = {
       count: count,
       next: next,
@@ -91,10 +91,10 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
     const count = parseInt(searchSum[4]);
     const next = count === parseInt(searchSum[2]) // endOfPage
       ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) + 1}`;
+      : `${host}/api/${langConfig.lang}/recipe?search=${search}&page=${parseInt(page) + 1}`;
     const previous = page < 1 // startOfPage
       ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) - 1}`;
+      : `${host}/api/${langConfig.lang}/recipe?search=${search}&page=${parseInt(page) - 1}`;
     responseGetList = {
       count: count,
       next: next,
