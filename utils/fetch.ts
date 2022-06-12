@@ -1,5 +1,6 @@
 import got from "got";
 import qs from "qs";
+import path from "path"
 
 const headers = {
   "cache-control": "no-cache",
@@ -16,7 +17,7 @@ function generateParams(options: object): string {
 }
 
 export async function fetchHTML(uri: String, params: object): Promise<string> {
-  const url = `${uri}?${generateParams(params)}`;
-  const res = await got.get(url, { headers, responseType: "text" });
-  return res.body;
+  const url = path.join(String(uri), `?${generateParams(params)}`);
+  const response = await got.get(url, { headers, responseType: "text" });
+  return response.body;
 }

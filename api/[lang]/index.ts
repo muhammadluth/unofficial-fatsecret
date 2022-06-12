@@ -4,7 +4,7 @@ import { fetchHTML } from "../../utils/fetch";
 import { getLang } from "../../utils/lang";
 
 interface DefaultMenu {
-  image: string;
+  image: string | undefined;
   title: string;
   desc: string;
 }

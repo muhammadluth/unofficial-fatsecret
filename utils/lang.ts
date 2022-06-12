@@ -3,6 +3,7 @@ interface LanguageConfig {
   baseUrl: string;
   menuUrl: string;
   searchUrl: string;
+  recipeUrl: string;
   otherSizes: string;
   caloriesPrefix: string;
   measurementRegex: {
@@ -19,6 +20,7 @@ export const languanges: LanguageConfig[] = [
     baseUrl: 'https://www.fatsecret.com',
     menuUrl: 'https://www.fatsecret.com/calories-nutrition',
     searchUrl: 'https://www.fatsecret.com/calories-nutrition/search',
+    recipeUrl:"https://www.fatsecret.co.id/Default.aspx",
     otherSizes: 'Other sizes:',
     caloriesPrefix: 'kcal',
     measurementRegex: {
@@ -33,6 +35,7 @@ export const languanges: LanguageConfig[] = [
     baseUrl: 'https://www.fatsecret.co.id',
     menuUrl: 'https://www.fatsecret.co.id/kalori-gizi',
     searchUrl: 'https://www.fatsecret.co.id/kalori-gizi/search',
+    recipeUrl:"https://www.fatsecret.co.id/Default.aspx",
     otherSizes: 'Ukuran Lainnya:',
     caloriesPrefix: 'kkal',
     measurementRegex: {

@@ -10,7 +10,7 @@ export default async (
       lang: l.lang,
       url: l.searchUrl,
     })),
-    repo: "https://github.com/mandaputtra/fatsecret-unofc-api",
+    repo: "https://github.com/muhammadluth/unofficial-fatsecret",
     credits: ["fatsecret.com", "vercel.sh"],
   });
 };

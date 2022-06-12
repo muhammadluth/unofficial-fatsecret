@@ -1,39 +1,14 @@
-import { VercelResponse, VercelRequest } from "@vercel/node";
 import cheerio from "cheerio";
+import { VercelResponse, VercelRequest } from "@vercel/node";
 import { fetchHTML } from "../../../utils/fetch";
 import { getLang } from "../../../utils/lang";
+import { ResponseGetList, ResultGetList, OtherServing } from "../../../types/search"
 
-interface ServingList {
-  name: string;
-  calories: number;
-}
 
-interface FoundList {
-  title: string;
-  serving: string;
-  otherServing: ServingList[];
-  calories: number;
-  fat: number;
-  carbo: number;
-  protein: number;
-  detailLink: string;
-}
-
-interface Response {
-  count: number;
-  next: string;
-  previous: string;
-  results: FoundList[];
-}
-
-export default async (
-  request: VercelRequest,
-  response: VercelResponse
-): Promise<void> => {
-  const url = request.headers["x-forwarded-host"];
-  const proto = request.headers["x-forwarded-proto"];
+export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
+  const host = `${request.headers["x-forwarded-proto"]}://${request.headers["x-forwarded-host"]}`
   const query: any = request.query.query;
-  const page: any = +request.query.page || 0;
+  const page: any = request.query.page || 0;
   const langConfig = getLang(String(request.query.lang));
 
   if (!langConfig) {
@@ -50,14 +25,15 @@ export default async (
     q: query,
     pg: page,
   });
+
   const $ = cheerio.load(html);
-  const results: FoundList[] = [];
+  const results: ResultGetList[] = [];
 
   $("table.generic.searchResult td.borderBottom").each((_, elem: any) => {
     const element = $(elem);
     const title = element.find("a.prominent");
-    const linkText = title.text();
-    const detailLink = title.attr("href");
+    const titleText = title.text();
+    const linkDetail = title.attr("href");
     const normalizeText = element
       .find("div.smallText.greyText.greyLink")
       .text()
@@ -86,7 +62,7 @@ export default async (
         .replace(",", ".") || 0;
 
     // Search other serving method
-    const otherServing: ServingList[] = [];
+    const otherServing: OtherServing[] = [];
     if (splitSection[1]) {
       const val = splitSection[1].split(",");
       val.pop();
@@ -103,7 +79,7 @@ export default async (
     }
 
     results.push({
-      title: linkText,
+      title: titleText,
       protein,
       fat,
       carbo,
@@ -112,9 +88,7 @@ export default async (
       serving: splitGeneralInfoString[0]
         ? splitGeneralInfoString[0].trim()
         : null,
-      detailLink: `${proto}://${url}/api/${
-        langConfig.lang
-      }/detail?url=${encodeURIComponent(detailLink)}`,
+      detailLink: `${host}/api/${langConfig.lang}/detail?url=${encodeURIComponent(String(linkDetail))}`,
     });
   });
 
@@ -124,15 +98,11 @@ export default async (
   const startOfPage = page < 1;
   const next = endOfPage
     ? null
-    : `${proto}://${url}/api/${langConfig.lang}/search?query=${query}&page=${
-        parseInt(page) + 1
-      }`;
+    : `${host}/api/${langConfig.lang}/search?query=${query}&page=${parseInt(page) + 1}`;
   const previous = startOfPage
     ? null
-    : `${proto}://${url}/api/${langConfig.lang}/search?query=${query}&page=${
-        parseInt(page) - 1
-      }`;
-  const data: Response = {
+    : `${host}/api/${langConfig.lang}/search?query=${query}&page=${parseInt(page) - 1}`;
+  const data: ResponseGetList = {
     count,
     next,
     previous,
