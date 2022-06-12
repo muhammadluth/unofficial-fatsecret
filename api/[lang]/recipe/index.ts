@@ -111,7 +111,14 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
     };
   } else if (!cron && tempFileIsExists) {
     const data: any = fs.readFileSync(tempFile)
-    responseGetList = JSON.parse(data)
+    const JSONParse = JSON.parse(data)
+    const filterData = JSONParse.results.filter((item) => item.title.includes(search))
+    responseGetList = {
+      count: filterData.length,
+      next: JSONParse.next,
+      previous: JSONParse.previous,
+      results: filterData,
+    };
   }
 
 
