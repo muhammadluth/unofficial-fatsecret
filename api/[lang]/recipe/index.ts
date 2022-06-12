@@ -29,8 +29,12 @@ import { ResponseGetList, ListRecipeData } from "../../../types/recipe"
 */
 
 export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
+  const tempDir: string = "temp"
   const tempFile: string = path.join("temp", `[${dayjs().format("YYYY-MM-DD")}]-recipe.json`)
   const tempFileIsExists: boolean = fs.existsSync(tempFile) || false
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
 
   const host = `${request.headers["x-forwarded-proto"]}://${request.headers["x-forwarded-host"]}`
   const search: any = request.query.search;
@@ -127,8 +131,8 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
   if (cron) {
     fs.writeFile(tempFile,
       JSON.stringify(responseGetList, null, 4), function (err) {
-        if (err) console.log("error create file");
-        console.log('File is created successfully.');
+        err ? console.log("error create file")
+          : console.log('File is created successfully.')
       });
   }
   response.setHeader("Cache-Control", "s-maxage=100, stale-while-revalidate");
