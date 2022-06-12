@@ -2,18 +2,15 @@ import fs from "fs"
 import path from "path"
 import cheerio from "cheerio";
 import dayjs from "dayjs"
+import { tmpdir } from 'os';
 import { VercelResponse, VercelRequest } from "@vercel/node";
 import { fetchHTML } from "../../../utils/fetch";
 import { getLang } from "../../../utils/lang";
 import { ListRecipeData } from "../../../types/recipe"
 
 export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
-  const tempDir: string = "temp"
-  const tempFile: string = path.join("temp", `[${dayjs().format("YYYY-MM-DD")}]-recipe.json`)
+  const tempFile: string = path.join(String(tmpdir), `[${dayjs().format("YYYY-MM-DD")}]-recipe.json`)
   const tempFileIsExists: boolean = fs.existsSync(tempFile) || false
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
-  }
 
   const host = `${request.headers["x-forwarded-proto"]}://${request.headers["x-forwarded-host"]}`
   const search: any = request.query.search;
