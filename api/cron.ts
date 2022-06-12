@@ -13,6 +13,6 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
     }
 
     response.json({
-        message: "success"
+        message: `success ${page}`
     })
 }
