@@ -54,9 +54,9 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
 
   const results: ListRecipeData[] = []
 
-  let searchSum: any = ""
   let responseGetList: object = {};
   if (cron) {
+    let searchSum: any = ""
     for (; ;) {
       const html = await fetchHTML(langConfig.recipeUrl, {
         pa: "rs",
@@ -64,36 +64,13 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
         pg: page,
       });
       const $ = cheerio.load(html);
-      searchSum = $(".searchResultSummary").text().split(" ");
       const data: ListRecipeData[] = await DoLoadData($, langConfig)
       results.push(...data)
+
+      searchSum = $(".searchResultSummary").text().split(" ");
       if (results.length === parseInt(searchSum[4])) break;
       page += 1
     }
-
-    // set response
-    const count = parseInt(searchSum[4]);
-    const next = count === parseInt(searchSum[2]) // endOfPage
-      ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) + 1}`;
-    const previous = page < 1 // startOfPage
-      ? null
-      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) - 1}`;
-    responseGetList = {
-      count: count,
-      next: next,
-      previous: previous,
-      results: results,
-    };
-  } else if (!cron && !tempFileIsExists) {
-    const html = await fetchHTML(langConfig.recipeUrl, {
-      pa: "rs",
-      recipe: search,
-      pg: page,
-    });
-    const $ = cheerio.load(html);
-    const data: ListRecipeData[] = await DoLoadData($, langConfig)
-    results.push(...data)
 
     // set response
     const count = parseInt(searchSum[4]);
@@ -118,6 +95,31 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
       next: JSONParse.next,
       previous: JSONParse.previous,
       results: filterData,
+    };
+  } else if (!cron && !tempFileIsExists) {
+    const html = await fetchHTML(langConfig.recipeUrl, {
+      pa: "rs",
+      recipe: search,
+      pg: page,
+    });
+    const $ = cheerio.load(html);
+    const data: ListRecipeData[] = await DoLoadData($, langConfig)
+    results.push(...data)
+
+    // set response
+    const searchSum: any = $(".searchResultSummary").text().split(" ");
+    const count = parseInt(searchSum[4]);
+    const next = count === parseInt(searchSum[2]) // endOfPage
+      ? null
+      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) + 1}`;
+    const previous = page < 1 // startOfPage
+      ? null
+      : `${host}/api/${langConfig.lang}/search?search=${search}&page=${parseInt(page) - 1}`;
+    responseGetList = {
+      count: count,
+      next: next,
+      previous: previous,
+      results: results,
     };
   }
 
