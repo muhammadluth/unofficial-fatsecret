@@ -7,22 +7,26 @@ import { ResponseGetList, ResultGetList, OtherServing } from "../../../types/sea
 
 export default async (request: VercelRequest, response: VercelResponse): Promise<void> => {
   const host = `${request.headers["x-forwarded-proto"]}://${request.headers["x-forwarded-host"]}`
-  const query: any = request.query.query;
-  const page: any = request.query.page || 0;
+  const food: any = request.query.food;
+  const page: any = +request.query.page || 0;
   const langConfig = getLang(String(request.query.lang));
 
   if (!langConfig) {
-    response.json({ error: `${request.query.lang} are not supported` });
+    response.
+      status(400).
+      json({ message: `${request.query.lang} are not supported` });
     return;
   }
 
-  if (!query) {
-    response.json({ error: "Please insert a query, q=??" });
+  if (!food) {
+    response.
+      status(400).
+      json({ message: "Please insert query params" });
     return;
   }
 
   const html = await fetchHTML(langConfig.searchUrl, {
-    q: query,
+    q: food,
     pg: page,
   });
 
@@ -98,10 +102,10 @@ export default async (request: VercelRequest, response: VercelResponse): Promise
   const startOfPage = page < 1;
   const next = endOfPage
     ? null
-    : `${host}/api/${langConfig.lang}/search?query=${query}&page=${parseInt(page) + 1}`;
+    : `${host}/api/${langConfig.lang}/search?food=${food}&page=${parseInt(page) + 1}`;
   const previous = startOfPage
     ? null
-    : `${host}/api/${langConfig.lang}/search?query=${query}&page=${parseInt(page) - 1}`;
+    : `${host}/api/${langConfig.lang}/search?food=${food}&page=${parseInt(page) - 1}`;
   const data: ResponseGetList = {
     count,
     next,

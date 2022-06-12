@@ -2,10 +2,10 @@ export interface ResponseGetList {
     count: number;
     next: string | null;
     previous: string | null;
-    results: ResultGetList[];
+    results: ListRecipeData[];
 }
 
-export interface ResultGetList {
+export interface ListRecipeData {
     title: string;
     photo: string | null;
     portion: string | null;
@@ -18,14 +18,4 @@ export interface ResultGetList {
     meal_types: string[] | null;
     ingredients: string[] | null;
     instructions: string[] | null;
-}
-
-export interface GetListData {
-    title: string;
-    detailLink: string;
-    calorie: number | null;
-    fat: number | null;
-    carbo: number | null;
-    protein: number | null;
-    photo: string | null;
 }
