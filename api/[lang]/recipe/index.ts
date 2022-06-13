@@ -122,7 +122,7 @@ async function DoLoadData($: cheerio.Root, langConfig: any) {
     const title = element.find("a.prominent");
     const detailLink = path.join(langConfig.baseUrl, String(title.attr("href")))
     const titleText = title.text().trim();
-    const photo = element.find('img').attr('src');
+    const photo = element.find('img').attr('src')?.toString().replace("_sq\n","");
 
     // scraping nutritions data
     const recipeContent = element.find("div.smallText").text().replace(/(\r\n|\r\t|\t|\r)/gm, "").replace(/(\n|\n)/gm, "-")
