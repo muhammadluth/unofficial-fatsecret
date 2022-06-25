@@ -1,6 +1,6 @@
 import got from "got";
 import qs from "qs";
-import path from "path"
+import path from "path";
 
 const headers = {
   "cache-control": "no-cache",
