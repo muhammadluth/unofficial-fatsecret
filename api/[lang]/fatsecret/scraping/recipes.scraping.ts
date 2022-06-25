@@ -13,7 +13,7 @@ export const DoScrapingRecipes = async (
 ) => {
   const results: ResultData[] = [];
   let searchSum: any = "";
-  if (queryParams.recipe === "" && queryParams.limit === "all") {
+  if (queryParams.limit === "all") {
     for (;;) {
       queryParams.pg = 0;
       const html = await fetchHTML(fatsecretLang.recipeUrl, {
