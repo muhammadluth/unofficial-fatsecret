@@ -18,7 +18,6 @@ export const DoScrapingRecipes = async (
       queryParams.pg = 0;
       const html = await fetchHTML(fatsecretLang.recipeUrl, {
         pa: queryParams.pa,
-        recipe: queryParams.recipe,
         pg: queryParams.pg,
       });
       const $ = cheerio.load(html);
